@@ -5,14 +5,14 @@ composer.lockをTSVに変換する。
 
 ## 準備
 
-1. ```app/files/composer.lock```に対象のファイルを配置する。
+1. ```app/files```に対象のファイルを配置する。
 
 ## 実行
 
 ``` sh
-docker-compose up 
+docker-compose run python ${composer.lockのファイル名} ${実行結果ファイル名} 
 ```
 
 ## 実行結果
 
-```app/files/result.tsv```に出力される。
+```app/files```配下に出力される。
