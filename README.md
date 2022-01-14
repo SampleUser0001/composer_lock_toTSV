@@ -10,6 +10,7 @@ composer.lockをTSVに変換する。
 ## 実行
 
 ``` sh
+# 実行ファイル名には「{}」を含めること。
 docker-compose run python ${composer.lockのファイル名} ${実行結果ファイル名} 
 ```
 

@@ -25,13 +25,15 @@ logger.propagate = False
 
 FILE_HOME = os.path.join(PYTHON_APP_HOME, *['file'])
 
+KEYS = ['name', 'version', 'require-dev', 'require-dev-version']
+SUB_KEYS = ['packages', 'packages-dev']
+
 def output(filepath, dic, keys, mode='w'):
     with open(filepath, mode=mode) as f:
         f.write('\t'.join(keys) + "\r\n")
         for item in dic:
             for key, value in item.get(keys[2], {'-':'-'}).items():
                 f.write('{}\t{}\t{}\t{}\r\n'.format(item[keys[0]], item[keys[1]], key, value))
-        f.write('----\r\n')
     
 if __name__ == '__main__':
     # .envの取得
@@ -44,15 +46,16 @@ if __name__ == '__main__':
     args_index = 1
 
     COMPOSER_LOCK_PATH = os.path.join(FILE_HOME, *[args[args_index]]) ; args_index += 1
-    OUTPUT_FILE_PATH = os.path.join(FILE_HOME, *[args[args_index]]) ; args_index += 1
+    filename_format = args[args_index] ; args_index += 1
 
     with open(COMPOSER_LOCK_PATH, mode='r') as f:
         composer = json.loads(f.read())
-    
-    keys = ['name', 'version', 'require-dev']
 
-    packages = composer['packages']
-    packages_dev = composer['packages-dev']
+    for i in range(len(SUB_KEYS)):
+        output(
+            os.path.join(FILE_HOME, *[filename_format.format(SUB_KEYS[i])]),
+            composer[SUB_KEYS[i]],
+            KEYS,
+            mode=('w' if i == 0 else 'a')
+        )
     
-    output(OUTPUT_FILE_PATH, packages, keys, mode='w')
-    output(OUTPUT_FILE_PATH, packages_dev, keys, mode='a')
